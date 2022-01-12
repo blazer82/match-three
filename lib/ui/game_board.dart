@@ -13,14 +13,17 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
-  List<int> board = List.filled(rows * cols, 0);
+  List<int> _board = List.filled(rows * cols, 0);
+  Offset _dragStart = Offset.zero;
+  Offset _dragDelta = Offset.zero;
+  bool _boardInteractive = true;
 
   @override
   void initState() {
     super.initState();
 
     final randGen = Random();
-    board = board.map((_) => randGen.nextInt(5)).toList(growable: false);
+    _board = _board.map((_) => randGen.nextInt(5)).toList(growable: false);
   }
 
   Widget _mapRow({required int row}) {
@@ -28,7 +31,7 @@ class _GameBoardState extends State<GameBoard> {
     final size = (MediaQuery.of(context).size.width / cols) - (2 * padding);
 
     return Row(
-      children: board
+      children: _board
           .getRange(row * cols, row * cols + cols)
           .map((item) => Padding(
                 padding: const EdgeInsets.all(padding),
@@ -59,13 +62,92 @@ class _GameBoardState extends State<GameBoard> {
     }
   }
 
+  void _handleDragStart(DragStartDetails details) {
+    setState(() {
+      _dragStart = details.localPosition;
+      _dragDelta = Offset.zero;
+    });
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    setState(() {
+      _dragDelta = details.localPosition - _dragStart;
+    });
+  }
+
+  void _handleDragEnd(DragEndDetails details) async {
+    if (_dragDelta.distance < 10) return;
+
+    final tileIndex = _getTileIndexByLocalPosition(_dragStart);
+    print('### tileIndex');
+    print(tileIndex);
+
+    setState(() {
+      _boardInteractive = false;
+    });
+
+    if (_dragDelta.dx.abs() > _dragDelta.dy.abs()) {
+      // horizontal
+      if (_dragDelta.dx > 0) {
+        // right
+        print('RIGHT');
+        await _exchangeTiles(
+            tileIndex, (tileIndex + 1) % cols > 0 ? tileIndex + 1 : null);
+      } else {
+        // left
+        print('LEFT');
+        await _exchangeTiles(
+            tileIndex, tileIndex % cols > 0 ? tileIndex - 1 : null);
+      }
+    } else {
+      // vertical
+      if (_dragDelta.dy > 0) {
+        // down
+        print('DOWN');
+        await _exchangeTiles(tileIndex,
+            (tileIndex + cols) < _board.length ? tileIndex + cols : null);
+      } else {
+        // up
+        print('UP');
+        await _exchangeTiles(
+            tileIndex, (tileIndex - cols) >= 0 ? tileIndex - cols : null);
+      }
+    }
+
+    setState(() {
+      _boardInteractive = true;
+    });
+  }
+
+  int _getTileIndexByLocalPosition(Offset position) {
+    final tileSizeWithPadding = MediaQuery.of(context).size.width / cols;
+    final col = (position.dx / tileSizeWithPadding).floor();
+    final row = (position.dy / tileSizeWithPadding).floor();
+    return row * cols + col;
+  }
+
+  Future<void> _exchangeTiles(int index1, int? index2) async {
+    if (index2 == null) return;
+
+    final tile1 = _board[index1];
+    final tile2 = _board[index2];
+
+    _board[index1] = tile2;
+    _board[index2] = tile1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: List.generate(rows, (index) => index)
-            .map((index) => _mapRow(row: index))
-            .toList(growable: false),
+      child: GestureDetector(
+        onPanStart: _boardInteractive ? _handleDragStart : null,
+        onPanUpdate: _boardInteractive ? _handleDragUpdate : null,
+        onPanEnd: _boardInteractive ? _handleDragEnd : null,
+        child: Column(
+          children: List.generate(rows, (index) => index)
+              .map((index) => _mapRow(row: index))
+              .toList(growable: false),
+        ),
       ),
     );
   }
