@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 const rows = 6;
@@ -16,7 +17,7 @@ class _GameBoardState extends State<GameBoard> {
   List<int> _board = List.filled(rows * cols, 0);
   Offset _dragStart = Offset.zero;
   Offset _dragDelta = Offset.zero;
-  bool _boardInteractive = true;
+  List<int> _currentAnimation = [];
 
   @override
   void initState() {
@@ -26,27 +27,56 @@ class _GameBoardState extends State<GameBoard> {
     _board = _board.map((_) => randGen.nextInt(5)).toList(growable: false);
   }
 
-  Widget _mapRow({required int row}) {
+  Widget _mapBoardToTiles(int index, int color) {
     const padding = 5.0;
     final size = (MediaQuery.of(context).size.width / cols) - (2 * padding);
+    final position = _getLocalPositionFromTileIndex(index);
 
-    return Row(
-      children: _board
-          .getRange(row * cols, row * cols + cols)
-          .map((item) => Padding(
-                padding: const EdgeInsets.all(padding),
-                child: Container(
-                  color: _mapColor(index: item),
-                  height: size,
-                  width: size,
-                ),
-              ))
-          .toList(growable: false),
+    final tileElement = Padding(
+      padding: const EdgeInsets.all(padding),
+      child: Container(
+        decoration: BoxDecoration(
+          color: _mapColor(color),
+          borderRadius: BorderRadius.circular(size / 4),
+        ),
+        height: size,
+        width: size,
+      ),
     );
+
+    if (_currentAnimation.contains(index)) {
+      final otherIndex =
+          _currentAnimation.firstWhere((element) => element != index);
+
+      final otherPosition = _getLocalPositionFromTileIndex(otherIndex);
+
+      return TweenAnimationBuilder(
+          tween: Tween<Offset>(begin: otherPosition, end: position),
+          duration: kThemeChangeDuration,
+          curve: Curves.bounceInOut,
+          onEnd: () {
+            setState(() {
+              _currentAnimation = [];
+            });
+          },
+          builder: (context, Offset value, _) {
+            return Positioned(
+              left: value.dx,
+              top: value.dy,
+              child: tileElement,
+            );
+          });
+    } else {
+      return Positioned(
+        left: position.dx,
+        top: position.dy,
+        child: tileElement,
+      );
+    }
   }
 
-  Color _mapColor({required int index}) {
-    switch (index) {
+  Color _mapColor(int color) {
+    switch (color) {
       case 0:
         return Colors.red;
       case 1:
@@ -75,48 +105,33 @@ class _GameBoardState extends State<GameBoard> {
     });
   }
 
-  void _handleDragEnd(DragEndDetails details) async {
+  void _handleDragEnd(DragEndDetails details) {
     if (_dragDelta.distance < 10) return;
 
     final tileIndex = _getTileIndexByLocalPosition(_dragStart);
-    print('### tileIndex');
-    print(tileIndex);
-
-    setState(() {
-      _boardInteractive = false;
-    });
 
     if (_dragDelta.dx.abs() > _dragDelta.dy.abs()) {
       // horizontal
       if (_dragDelta.dx > 0) {
         // right
-        print('RIGHT');
-        await _exchangeTiles(
+        _exchangeTiles(
             tileIndex, (tileIndex + 1) % cols > 0 ? tileIndex + 1 : null);
       } else {
         // left
-        print('LEFT');
-        await _exchangeTiles(
-            tileIndex, tileIndex % cols > 0 ? tileIndex - 1 : null);
+        _exchangeTiles(tileIndex, tileIndex % cols > 0 ? tileIndex - 1 : null);
       }
     } else {
       // vertical
       if (_dragDelta.dy > 0) {
         // down
-        print('DOWN');
-        await _exchangeTiles(tileIndex,
+        _exchangeTiles(tileIndex,
             (tileIndex + cols) < _board.length ? tileIndex + cols : null);
       } else {
         // up
-        print('UP');
-        await _exchangeTiles(
+        _exchangeTiles(
             tileIndex, (tileIndex - cols) >= 0 ? tileIndex - cols : null);
       }
     }
-
-    setState(() {
-      _boardInteractive = true;
-    });
   }
 
   int _getTileIndexByLocalPosition(Offset position) {
@@ -126,27 +141,35 @@ class _GameBoardState extends State<GameBoard> {
     return row * cols + col;
   }
 
-  Future<void> _exchangeTiles(int index1, int? index2) async {
+  Offset _getLocalPositionFromTileIndex(int index) {
+    final tileSizeWithPadding = MediaQuery.of(context).size.width / cols;
+    final row = (index / cols).floor();
+    final col = index % cols;
+    return Offset(col * tileSizeWithPadding, row * tileSizeWithPadding);
+  }
+
+  void _exchangeTiles(int index1, int? index2) {
     if (index2 == null) return;
 
     final tile1 = _board[index1];
     final tile2 = _board[index2];
 
-    _board[index1] = tile2;
-    _board[index2] = tile1;
+    setState(() {
+      _currentAnimation = [index1, index2];
+      _board[index1] = tile2;
+      _board[index2] = tile1;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: GestureDetector(
-        onPanStart: _boardInteractive ? _handleDragStart : null,
-        onPanUpdate: _boardInteractive ? _handleDragUpdate : null,
-        onPanEnd: _boardInteractive ? _handleDragEnd : null,
-        child: Column(
-          children: List.generate(rows, (index) => index)
-              .map((index) => _mapRow(row: index))
-              .toList(growable: false),
+        onPanStart: _handleDragStart,
+        onPanUpdate: _handleDragUpdate,
+        onPanEnd: _handleDragEnd,
+        child: Stack(
+          children: _board.mapIndexed(_mapBoardToTiles).toList(growable: false),
         ),
       ),
     );
