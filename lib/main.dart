@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:puzzle/ui/home_page.dart';
+import 'package:match_three/ui/home_page.dart';
 
 void main() {
   runApp(const MyApp());

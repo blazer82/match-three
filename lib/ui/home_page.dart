@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:puzzle/ui/game_board.dart';
+import 'package:match_three/ui/game_board.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);

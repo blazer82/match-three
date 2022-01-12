@@ -1,4 +1,4 @@
-package com.example.puzzle
+package de.productionbuild.match_three
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,6 @@
 {
-    "name": "puzzle",
-    "short_name": "puzzle",
+    "name": "match_three",
+    "short_name": "match_three",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,4 +1,4 @@
-# puzzle
+# match_three
 
 A new Flutter project.
 
