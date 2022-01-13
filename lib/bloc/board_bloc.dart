@@ -118,8 +118,8 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
   int? _getLeftOrNull(int index) => (index % cols) > 0 ? index - 1 : null;
   int? _getRightOrNull(int index) => (index + 1) % cols > 0 ? index + 1 : null;
   int? _getAboveOrNull(int index) => (index - cols) >= 0 ? index - cols : null;
-  int? _getBelowOrNull(int index) =>
-      (index + cols) < state.board.length ? index + cols : null;
+  int? _getBelowOrNull(int index, {List<int>? board}) =>
+      (index + cols) < (board ?? state.board).length ? index + cols : null;
 
   List<int> _newBoard() =>
       state.board.map((_) => randGen.nextInt(7) + 1).toList(growable: false);
@@ -129,19 +129,19 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
         final left = _getLeftOrNull(index);
         final right = _getRightOrNull(index);
         final above = _getAboveOrNull(index);
-        final below = _getBelowOrNull(index);
+        final below = _getBelowOrNull(index, board: board);
 
         if (left != null &&
             right != null &&
-            element == state.board[left] &&
-            element == state.board[right]) {
+            element == board[left] &&
+            element == board[right]) {
           return [left, index, right];
         }
 
         if (above != null &&
             below != null &&
-            element == state.board[above] &&
-            element == state.board[below]) {
+            element == board[above] &&
+            element == board[below]) {
           return [above, index, below];
         }
 
