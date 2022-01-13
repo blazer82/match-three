@@ -125,9 +125,7 @@ class _BoardState extends State<_Board> {
     void _handleDragUpdate(DragUpdateDetails details) {
       final delta = details.localPosition - _dragStart;
 
-      final minDistance = MediaQuery.of(context).devicePixelRatio * 5;
-
-      if (!_dragActive || delta.distance < minDistance) return;
+      if (!_dragActive || delta.distance < 15) return;
 
       final boardBloc = BlocProvider.of<BoardBloc>(context);
 
