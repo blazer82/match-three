@@ -16,6 +16,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
           board: List.filled(cols * rows, 0),
           currentMove: [],
           positionsToEliminate: [],
+          fillAnimations: [],
         )) {
     on<Initialize>(_onInitialize);
     on<Move>(_onMove);
@@ -23,6 +24,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
     on<Evaluate>(_onEvaluate);
     on<EndEvaluation>(_onEndEvaluation);
     on<Fill>(_onFill);
+    on<EndFill>(_onEndFill);
   }
 
   final int cols;
@@ -92,27 +94,71 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
   void _onEvaluate(Evaluate event, Emitter<BoardState> emit) {
     final matches = _returnMatches(state.board);
 
-    emit(state.copyWith(
-      status: BoardStatus.evaluating,
-      positionsToEliminate: matches,
-    ));
+    if (matches.isNotEmpty) {
+      emit(state.copyWith(
+        status: BoardStatus.evaluating,
+        positionsToEliminate: matches,
+      ));
+    }
+    else {
+      emit(state.copyWith(
+        status: BoardStatus.idle,
+      ));
+    }
   }
 
   void _onEndEvaluation(EndEvaluation event, Emitter<BoardState> emit) {
+    final cleanedBoard = state.board
+        .mapIndexed((index, element) =>
+            state.positionsToEliminate.contains(index) ? 0 : element)
+        .toList(growable: false);
+
     emit(state.copyWith(
       status: BoardStatus.idle,
-      board: state.board
-          .mapIndexed((index, element) =>
-              state.positionsToEliminate.contains(index) ? 0 : element)
-          .toList(growable: false),
+      board: cleanedBoard,
       positionsToEliminate: [],
     ));
+
+    add(const Fill());
   }
 
   void _onFill(Fill event, Emitter<BoardState> emit) {
+    var board = List.of(state.board, growable: false);
+    var animations = List.of(state.fillAnimations);
+
+    for (var row = rows - 2; row >= 0; row--) {
+      for (var col = cols - 1; col >= 0; col--) {
+        final index = row * cols + col;
+        if (board[index] > 0) {
+          for (var toIndex = (rows - 1) * cols + col;
+              toIndex > index;
+              toIndex -= cols) {
+            if (board[toIndex] == 0) {
+              animations.add([index, toIndex]);
+              board[toIndex] = board[index];
+              board[index] = 0;
+              break;
+            }
+          }
+        }
+      }
+    }
+
     emit(state.copyWith(
       status: BoardStatus.filling,
+      fillAnimations: animations,
+      pendingBoard: board,
     ));
+  }
+
+  void _onEndFill(EndFill event, Emitter<BoardState> emit) {
+    emit(state.copyWith(
+      status: BoardStatus.idle,
+      fillAnimations: [],
+      board: state.pendingBoard ?? state.board,
+    ));
+
+    add(const Evaluate());
   }
 
   int? _getLeftOrNull(int index) => (index % cols) > 0 ? index - 1 : null;

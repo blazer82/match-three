@@ -21,13 +21,17 @@ class _$BoardStateTearOff {
   _BoardState call(
       {required BoardStatus status,
       required List<int> board,
+      List<int>? pendingBoard,
       required List<int> currentMove,
-      required List<int> positionsToEliminate}) {
+      required List<int> positionsToEliminate,
+      required List<List<int>> fillAnimations}) {
     return _BoardState(
       status: status,
       board: board,
+      pendingBoard: pendingBoard,
       currentMove: currentMove,
       positionsToEliminate: positionsToEliminate,
+      fillAnimations: fillAnimations,
     );
   }
 }
@@ -39,8 +43,10 @@ const $BoardState = _$BoardStateTearOff();
 mixin _$BoardState {
   BoardStatus get status => throw _privateConstructorUsedError;
   List<int> get board => throw _privateConstructorUsedError;
+  List<int>? get pendingBoard => throw _privateConstructorUsedError;
   List<int> get currentMove => throw _privateConstructorUsedError;
   List<int> get positionsToEliminate => throw _privateConstructorUsedError;
+  List<List<int>> get fillAnimations => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BoardStateCopyWith<BoardState> get copyWith =>
@@ -55,8 +61,10 @@ abstract class $BoardStateCopyWith<$Res> {
   $Res call(
       {BoardStatus status,
       List<int> board,
+      List<int>? pendingBoard,
       List<int> currentMove,
-      List<int> positionsToEliminate});
+      List<int> positionsToEliminate,
+      List<List<int>> fillAnimations});
 }
 
 /// @nodoc
@@ -71,8 +79,10 @@ class _$BoardStateCopyWithImpl<$Res> implements $BoardStateCopyWith<$Res> {
   $Res call({
     Object? status = freezed,
     Object? board = freezed,
+    Object? pendingBoard = freezed,
     Object? currentMove = freezed,
     Object? positionsToEliminate = freezed,
+    Object? fillAnimations = freezed,
   }) {
     return _then(_value.copyWith(
       status: status == freezed
@@ -83,6 +93,10 @@ class _$BoardStateCopyWithImpl<$Res> implements $BoardStateCopyWith<$Res> {
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      pendingBoard: pendingBoard == freezed
+          ? _value.pendingBoard
+          : pendingBoard // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
       currentMove: currentMove == freezed
           ? _value.currentMove
           : currentMove // ignore: cast_nullable_to_non_nullable
@@ -91,6 +105,10 @@ class _$BoardStateCopyWithImpl<$Res> implements $BoardStateCopyWith<$Res> {
           ? _value.positionsToEliminate
           : positionsToEliminate // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      fillAnimations: fillAnimations == freezed
+          ? _value.fillAnimations
+          : fillAnimations // ignore: cast_nullable_to_non_nullable
+              as List<List<int>>,
     ));
   }
 }
@@ -104,8 +122,10 @@ abstract class _$BoardStateCopyWith<$Res> implements $BoardStateCopyWith<$Res> {
   $Res call(
       {BoardStatus status,
       List<int> board,
+      List<int>? pendingBoard,
       List<int> currentMove,
-      List<int> positionsToEliminate});
+      List<int> positionsToEliminate,
+      List<List<int>> fillAnimations});
 }
 
 /// @nodoc
@@ -122,8 +142,10 @@ class __$BoardStateCopyWithImpl<$Res> extends _$BoardStateCopyWithImpl<$Res>
   $Res call({
     Object? status = freezed,
     Object? board = freezed,
+    Object? pendingBoard = freezed,
     Object? currentMove = freezed,
     Object? positionsToEliminate = freezed,
+    Object? fillAnimations = freezed,
   }) {
     return _then(_BoardState(
       status: status == freezed
@@ -134,6 +156,10 @@ class __$BoardStateCopyWithImpl<$Res> extends _$BoardStateCopyWithImpl<$Res>
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      pendingBoard: pendingBoard == freezed
+          ? _value.pendingBoard
+          : pendingBoard // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
       currentMove: currentMove == freezed
           ? _value.currentMove
           : currentMove // ignore: cast_nullable_to_non_nullable
@@ -142,6 +168,10 @@ class __$BoardStateCopyWithImpl<$Res> extends _$BoardStateCopyWithImpl<$Res>
           ? _value.positionsToEliminate
           : positionsToEliminate // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      fillAnimations: fillAnimations == freezed
+          ? _value.fillAnimations
+          : fillAnimations // ignore: cast_nullable_to_non_nullable
+              as List<List<int>>,
     ));
   }
 }
@@ -152,21 +182,27 @@ class _$_BoardState implements _BoardState {
   const _$_BoardState(
       {required this.status,
       required this.board,
+      this.pendingBoard,
       required this.currentMove,
-      required this.positionsToEliminate});
+      required this.positionsToEliminate,
+      required this.fillAnimations});
 
   @override
   final BoardStatus status;
   @override
   final List<int> board;
   @override
+  final List<int>? pendingBoard;
+  @override
   final List<int> currentMove;
   @override
   final List<int> positionsToEliminate;
+  @override
+  final List<List<int>> fillAnimations;
 
   @override
   String toString() {
-    return 'BoardState(status: $status, board: $board, currentMove: $currentMove, positionsToEliminate: $positionsToEliminate)';
+    return 'BoardState(status: $status, board: $board, pendingBoard: $pendingBoard, currentMove: $currentMove, positionsToEliminate: $positionsToEliminate, fillAnimations: $fillAnimations)';
   }
 
   @override
@@ -177,9 +213,13 @@ class _$_BoardState implements _BoardState {
             const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality().equals(other.board, board) &&
             const DeepCollectionEquality()
+                .equals(other.pendingBoard, pendingBoard) &&
+            const DeepCollectionEquality()
                 .equals(other.currentMove, currentMove) &&
             const DeepCollectionEquality()
-                .equals(other.positionsToEliminate, positionsToEliminate));
+                .equals(other.positionsToEliminate, positionsToEliminate) &&
+            const DeepCollectionEquality()
+                .equals(other.fillAnimations, fillAnimations));
   }
 
   @override
@@ -187,8 +227,10 @@ class _$_BoardState implements _BoardState {
       runtimeType,
       const DeepCollectionEquality().hash(status),
       const DeepCollectionEquality().hash(board),
+      const DeepCollectionEquality().hash(pendingBoard),
       const DeepCollectionEquality().hash(currentMove),
-      const DeepCollectionEquality().hash(positionsToEliminate));
+      const DeepCollectionEquality().hash(positionsToEliminate),
+      const DeepCollectionEquality().hash(fillAnimations));
 
   @JsonKey(ignore: true)
   @override
@@ -200,17 +242,23 @@ abstract class _BoardState implements BoardState {
   const factory _BoardState(
       {required BoardStatus status,
       required List<int> board,
+      List<int>? pendingBoard,
       required List<int> currentMove,
-      required List<int> positionsToEliminate}) = _$_BoardState;
+      required List<int> positionsToEliminate,
+      required List<List<int>> fillAnimations}) = _$_BoardState;
 
   @override
   BoardStatus get status;
   @override
   List<int> get board;
   @override
+  List<int>? get pendingBoard;
+  @override
   List<int> get currentMove;
   @override
   List<int> get positionsToEliminate;
+  @override
+  List<List<int>> get fillAnimations;
   @override
   @JsonKey(ignore: true)
   _$BoardStateCopyWith<_BoardState> get copyWith =>

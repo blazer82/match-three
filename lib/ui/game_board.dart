@@ -132,6 +132,30 @@ class _BoardState extends State<_Board> {
                 ),
               );
             });
+      } else if (boardBloc.state.fillAnimations
+          .any((element) => element.first == index)) {
+        final otherIndex = boardBloc.state.fillAnimations
+            .firstWhere((element) => element.first == index)
+            .last;
+
+        final otherPosition = _getLocalPositionFromTileIndex(otherIndex);
+
+        return TweenAnimationBuilder(
+            tween: Tween<Offset>(begin: position, end: otherPosition),
+            duration: kThemeChangeDuration * 5,
+            curve: Curves.bounceOut,
+            onEnd: () {
+              if (boardBloc.state.fillAnimations.first.first == index) {
+                boardBloc.add(const EndFill());
+              }
+            },
+            builder: (context, Offset value, _) {
+              return Positioned(
+                left: value.dx,
+                top: value.dy,
+                child: tileElement,
+              );
+            });
       } else {
         return Positioned(
           left: position.dx,

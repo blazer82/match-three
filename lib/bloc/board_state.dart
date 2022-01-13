@@ -8,7 +8,9 @@ class BoardState with _$BoardState {
   const factory BoardState({
     required BoardStatus status,
     required List<int> board,
+    List<int>? pendingBoard,
     required List<int> currentMove,
     required List<int> positionsToEliminate,
+    required List<List<int>> fillAnimations,
   }) = _BoardState;
 }

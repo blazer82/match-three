@@ -12,4 +12,5 @@ class BoardEvent with _$BoardEvent {
   const factory BoardEvent.evaluate() = Evaluate;
   const factory BoardEvent.endEvaluation() = EndEvaluation;
   const factory BoardEvent.fill() = Fill;
+  const factory BoardEvent.endFill() = EndFill;
 }
