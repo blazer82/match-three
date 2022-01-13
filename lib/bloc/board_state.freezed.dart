@@ -21,6 +21,7 @@ class _$BoardStateTearOff {
   _BoardState call(
       {required BoardStatus status,
       required List<int> board,
+      required List<int> spareBoard,
       List<int>? pendingBoard,
       required List<int> currentMove,
       required List<int> positionsToEliminate,
@@ -28,6 +29,7 @@ class _$BoardStateTearOff {
     return _BoardState(
       status: status,
       board: board,
+      spareBoard: spareBoard,
       pendingBoard: pendingBoard,
       currentMove: currentMove,
       positionsToEliminate: positionsToEliminate,
@@ -43,6 +45,7 @@ const $BoardState = _$BoardStateTearOff();
 mixin _$BoardState {
   BoardStatus get status => throw _privateConstructorUsedError;
   List<int> get board => throw _privateConstructorUsedError;
+  List<int> get spareBoard => throw _privateConstructorUsedError;
   List<int>? get pendingBoard => throw _privateConstructorUsedError;
   List<int> get currentMove => throw _privateConstructorUsedError;
   List<int> get positionsToEliminate => throw _privateConstructorUsedError;
@@ -61,6 +64,7 @@ abstract class $BoardStateCopyWith<$Res> {
   $Res call(
       {BoardStatus status,
       List<int> board,
+      List<int> spareBoard,
       List<int>? pendingBoard,
       List<int> currentMove,
       List<int> positionsToEliminate,
@@ -79,6 +83,7 @@ class _$BoardStateCopyWithImpl<$Res> implements $BoardStateCopyWith<$Res> {
   $Res call({
     Object? status = freezed,
     Object? board = freezed,
+    Object? spareBoard = freezed,
     Object? pendingBoard = freezed,
     Object? currentMove = freezed,
     Object? positionsToEliminate = freezed,
@@ -92,6 +97,10 @@ class _$BoardStateCopyWithImpl<$Res> implements $BoardStateCopyWith<$Res> {
       board: board == freezed
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      spareBoard: spareBoard == freezed
+          ? _value.spareBoard
+          : spareBoard // ignore: cast_nullable_to_non_nullable
               as List<int>,
       pendingBoard: pendingBoard == freezed
           ? _value.pendingBoard
@@ -122,6 +131,7 @@ abstract class _$BoardStateCopyWith<$Res> implements $BoardStateCopyWith<$Res> {
   $Res call(
       {BoardStatus status,
       List<int> board,
+      List<int> spareBoard,
       List<int>? pendingBoard,
       List<int> currentMove,
       List<int> positionsToEliminate,
@@ -142,6 +152,7 @@ class __$BoardStateCopyWithImpl<$Res> extends _$BoardStateCopyWithImpl<$Res>
   $Res call({
     Object? status = freezed,
     Object? board = freezed,
+    Object? spareBoard = freezed,
     Object? pendingBoard = freezed,
     Object? currentMove = freezed,
     Object? positionsToEliminate = freezed,
@@ -155,6 +166,10 @@ class __$BoardStateCopyWithImpl<$Res> extends _$BoardStateCopyWithImpl<$Res>
       board: board == freezed
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      spareBoard: spareBoard == freezed
+          ? _value.spareBoard
+          : spareBoard // ignore: cast_nullable_to_non_nullable
               as List<int>,
       pendingBoard: pendingBoard == freezed
           ? _value.pendingBoard
@@ -182,6 +197,7 @@ class _$_BoardState implements _BoardState {
   const _$_BoardState(
       {required this.status,
       required this.board,
+      required this.spareBoard,
       this.pendingBoard,
       required this.currentMove,
       required this.positionsToEliminate,
@@ -191,6 +207,8 @@ class _$_BoardState implements _BoardState {
   final BoardStatus status;
   @override
   final List<int> board;
+  @override
+  final List<int> spareBoard;
   @override
   final List<int>? pendingBoard;
   @override
@@ -202,7 +220,7 @@ class _$_BoardState implements _BoardState {
 
   @override
   String toString() {
-    return 'BoardState(status: $status, board: $board, pendingBoard: $pendingBoard, currentMove: $currentMove, positionsToEliminate: $positionsToEliminate, fillAnimations: $fillAnimations)';
+    return 'BoardState(status: $status, board: $board, spareBoard: $spareBoard, pendingBoard: $pendingBoard, currentMove: $currentMove, positionsToEliminate: $positionsToEliminate, fillAnimations: $fillAnimations)';
   }
 
   @override
@@ -212,6 +230,8 @@ class _$_BoardState implements _BoardState {
             other is _BoardState &&
             const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality().equals(other.board, board) &&
+            const DeepCollectionEquality()
+                .equals(other.spareBoard, spareBoard) &&
             const DeepCollectionEquality()
                 .equals(other.pendingBoard, pendingBoard) &&
             const DeepCollectionEquality()
@@ -227,6 +247,7 @@ class _$_BoardState implements _BoardState {
       runtimeType,
       const DeepCollectionEquality().hash(status),
       const DeepCollectionEquality().hash(board),
+      const DeepCollectionEquality().hash(spareBoard),
       const DeepCollectionEquality().hash(pendingBoard),
       const DeepCollectionEquality().hash(currentMove),
       const DeepCollectionEquality().hash(positionsToEliminate),
@@ -242,6 +263,7 @@ abstract class _BoardState implements BoardState {
   const factory _BoardState(
       {required BoardStatus status,
       required List<int> board,
+      required List<int> spareBoard,
       List<int>? pendingBoard,
       required List<int> currentMove,
       required List<int> positionsToEliminate,
@@ -251,6 +273,8 @@ abstract class _BoardState implements BoardState {
   BoardStatus get status;
   @override
   List<int> get board;
+  @override
+  List<int> get spareBoard;
   @override
   List<int>? get pendingBoard;
   @override

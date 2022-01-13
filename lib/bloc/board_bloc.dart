@@ -14,6 +14,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
   }) : super(BoardState(
           status: BoardStatus.unknown,
           board: List.filled(cols * rows, 0),
+          spareBoard: List.filled(cols * rows, 0),
           currentMove: [],
           positionsToEliminate: [],
           fillAnimations: [],
@@ -44,6 +45,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
     emit(state.copyWith(
       status: BoardStatus.idle,
       board: board,
+      spareBoard: _newBoard(),
     ));
   }
 
@@ -122,20 +124,22 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
   }
 
   void _onFill(Fill event, Emitter<BoardState> emit) {
-    var board = List.of(state.board, growable: false);
+    var extendedBoard = List.of(state.spareBoard, growable: false) +
+        List.of(state.board, growable: false);
     var animations = List.of(state.fillAnimations);
 
-    for (var row = rows - 2; row >= 0; row--) {
+    for (var row = (rows * 2) - 2; row >= 0; row--) {
       for (var col = cols - 1; col >= 0; col--) {
         final index = row * cols + col;
-        if (board[index] > 0) {
-          for (var toIndex = (rows - 1) * cols + col;
+        if (extendedBoard[index] > 0) {
+          for (var toIndex = (rows * 2 - 1) * cols + col;
               toIndex > index;
               toIndex -= cols) {
-            if (board[toIndex] == 0) {
-              animations.add([index, toIndex]);
-              board[toIndex] = board[index];
-              board[index] = 0;
+            if (extendedBoard[toIndex] == 0) {
+              animations.add(
+                  [index - state.board.length, toIndex - state.board.length]);
+              extendedBoard[toIndex] = extendedBoard[index];
+              extendedBoard[index] = 0;
               break;
             }
           }
@@ -143,11 +147,17 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
       }
     }
 
+    animations = animations
+        .where((element) => element.last >= 0)
+        .toList(growable: false);
+
     if (animations.isNotEmpty) {
       emit(state.copyWith(
         status: BoardStatus.filling,
         fillAnimations: animations,
-        pendingBoard: board,
+        pendingBoard: extendedBoard
+            .getRange(state.board.length, state.board.length * 2)
+            .toList(growable: false),
       ));
     } else {
       emit(state.copyWith(
@@ -161,6 +171,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
       status: BoardStatus.idle,
       fillAnimations: [],
       board: state.pendingBoard ?? state.board,
+      spareBoard: _newBoard(),
     ));
 
     add(const Evaluate());

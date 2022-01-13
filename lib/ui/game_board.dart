@@ -71,14 +71,13 @@ class _BoardState extends State<_Board> {
       return Offset(col * tileSizeWithPadding, row * tileSizeWithPadding);
     }
 
-    Widget _mapBoardToTiles(int index, int color) {
+    Widget _getTileElement(int color) {
       final boardBloc = BlocProvider.of<BoardBloc>(context);
       const padding = 5.0;
       final size =
           (MediaQuery.of(context).size.width / boardBloc.cols) - (2 * padding);
-      final position = _getLocalPositionFromTileIndex(index);
 
-      final tileElement = Padding(
+      return Padding(
         padding: const EdgeInsets.all(padding),
         child: Container(
           decoration: BoxDecoration(
@@ -89,6 +88,12 @@ class _BoardState extends State<_Board> {
           width: size,
         ),
       );
+    }
+
+    Widget _mapBoardToTiles(int index, int color) {
+      final boardBloc = BlocProvider.of<BoardBloc>(context);
+      final position = _getLocalPositionFromTileIndex(index);
+      final tileElement = _getTileElement(color);
 
       if (boardBloc.state.status == BoardStatus.moving &&
           boardBloc.state.currentMove.contains(index)) {
@@ -168,6 +173,46 @@ class _BoardState extends State<_Board> {
       }
     }
 
+    Widget _mapSpareBoardToTiles(int index, int color) {
+      final boardBloc = BlocProvider.of<BoardBloc>(context);
+      final position = _getLocalPositionFromTileIndex(
+          index - boardBloc.state.spareBoard.length);
+      final tileElement = _getTileElement(color);
+
+      if (boardBloc.state.status == BoardStatus.filling &&
+          boardBloc.state.fillAnimations.any((element) =>
+              boardBloc.state.spareBoard.length + element.first == index &&
+              element.last >= 0)) {
+        final otherIndex = boardBloc.state.fillAnimations
+            .firstWhere((element) =>
+                boardBloc.state.spareBoard.length + element.first == index)
+            .last;
+
+        final otherPosition = _getLocalPositionFromTileIndex(otherIndex);
+
+        return TweenAnimationBuilder(
+            tween: Tween<Offset>(begin: position, end: otherPosition),
+            duration: kThemeChangeDuration * 5,
+            curve: Curves.bounceOut,
+            onEnd: () {
+              if (boardBloc.state.spareBoard.length +
+                      boardBloc.state.fillAnimations.first.first ==
+                  index) {
+                boardBloc.add(const EndFill());
+              }
+            },
+            builder: (context, Offset value, _) {
+              return Positioned(
+                left: value.dx,
+                top: value.dy,
+                child: tileElement,
+              );
+            });
+      } else {
+        return Container();
+      }
+    }
+
     void _handleDragStart(DragStartDetails details) {
       setState(() {
         _dragStart = details.localPosition;
@@ -227,8 +272,11 @@ class _BoardState extends State<_Board> {
         onPanEnd: _handleDragEnd,
         child: Stack(
           children: boardState.board
-              .mapIndexed(_mapBoardToTiles)
-              .toList(growable: false),
+                  .mapIndexed(_mapBoardToTiles)
+                  .toList(growable: false) +
+              boardState.spareBoard
+                  .mapIndexed(_mapSpareBoardToTiles)
+                  .toList(growable: false),
         ),
       );
     });
