@@ -18,6 +18,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
           currentMove: [],
           positionsToEliminate: [],
           fillAnimations: [],
+          score: 0,
         )) {
     on<Initialize>(_onInitialize);
     on<Move>(_onMove);
@@ -100,6 +101,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
       emit(state.copyWith(
         status: BoardStatus.evaluating,
         positionsToEliminate: matches,
+        score: state.score + matches.length,
       ));
     } else {
       emit(state.copyWith(

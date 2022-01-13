@@ -13,5 +13,6 @@ class BoardState with _$BoardState {
     required List<int> currentMove,
     required List<int> positionsToEliminate,
     required List<List<int>> fillAnimations,
+    required int score,
   }) = _BoardState;
 }

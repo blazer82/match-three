@@ -7,26 +7,14 @@ import 'package:match_three/bloc/board_state.dart';
 import 'package:match_three/types/board_direction.dart';
 import 'package:match_three/types/board_status.dart';
 
-class GameBoard extends StatelessWidget {
+class GameBoard extends StatefulWidget {
   const GameBoard({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider<BoardBloc>(
-      create: (_) => BoardBloc(cols: 6, rows: 6),
-      child: SafeArea(
-        child: _Board(),
-      ),
-    );
-  }
+  State<GameBoard> createState() => GameBoardState();
 }
 
-class _Board extends StatefulWidget {
-  @override
-  State<_Board> createState() => _BoardState();
-}
-
-class _BoardState extends State<_Board> {
+class GameBoardState extends State<GameBoard> {
   Offset _dragStart = Offset.zero;
   bool _dragActive = false;
 
