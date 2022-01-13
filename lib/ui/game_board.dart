@@ -28,7 +28,7 @@ class _Board extends StatefulWidget {
 
 class _BoardState extends State<_Board> {
   Offset _dragStart = Offset.zero;
-  Offset _dragDelta = Offset.zero;
+  bool _dragActive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -118,26 +118,24 @@ class _BoardState extends State<_Board> {
     void _handleDragStart(DragStartDetails details) {
       setState(() {
         _dragStart = details.localPosition;
-        _dragDelta = Offset.zero;
+        _dragActive = true;
       });
     }
 
     void _handleDragUpdate(DragUpdateDetails details) {
-      setState(() {
-        _dragDelta = details.localPosition - _dragStart;
-      });
-    }
+      final delta = details.localPosition - _dragStart;
 
-    void _handleDragEnd(DragEndDetails details) {
-      if (_dragDelta.distance < 10) return;
+      final minDistance = MediaQuery.of(context).devicePixelRatio * 5;
+
+      if (!_dragActive || delta.distance < minDistance) return;
 
       final boardBloc = BlocProvider.of<BoardBloc>(context);
 
       final tileIndex = _getTileIndexByLocalPosition(_dragStart);
 
-      if (_dragDelta.dx.abs() > _dragDelta.dy.abs()) {
+      if (delta.dx.abs() > delta.dy.abs()) {
         // horizontal
-        if (_dragDelta.dx > 0) {
+        if (delta.dx > 0) {
           boardBloc
               .add(Move(index: tileIndex, direction: BoardDirection.right));
         } else {
@@ -145,12 +143,22 @@ class _BoardState extends State<_Board> {
         }
       } else {
         // vertical
-        if (_dragDelta.dy > 0) {
+        if (delta.dy > 0) {
           boardBloc.add(Move(index: tileIndex, direction: BoardDirection.down));
         } else {
           boardBloc.add(Move(index: tileIndex, direction: BoardDirection.up));
         }
       }
+
+      setState(() {
+        _dragActive = false;
+      });
+    }
+
+    void _handleDragEnd(DragEndDetails details) {
+      setState(() {
+        _dragActive = false;
+      });
     }
 
     return BlocBuilder<BoardBloc, BoardState>(builder: (context, boardState) {
