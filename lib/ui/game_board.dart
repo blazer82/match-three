@@ -34,18 +34,22 @@ class _BoardState extends State<_Board> {
   Widget build(BuildContext context) {
     Color _mapColor(int color) {
       switch (color) {
-        case 0:
-          return Colors.red;
         case 1:
-          return Colors.green;
+          return Colors.red;
         case 2:
-          return Colors.blue;
+          return Colors.green;
         case 3:
-          return Colors.yellow;
+          return Colors.blue;
         case 4:
+          return Colors.yellow;
+        case 5:
           return Colors.purple;
+        case 6:
+          return Colors.orange;
+        case 7:
+          return Colors.teal;
         default:
-          return Colors.black;
+          return Colors.transparent;
       }
     }
 
@@ -97,13 +101,35 @@ class _BoardState extends State<_Board> {
             duration: kThemeChangeDuration,
             curve: Curves.bounceInOut,
             onEnd: () {
-              boardBloc.add(const EndMove());
+              if (boardBloc.state.currentMove.first == index) {
+                boardBloc.add(const EndMove());
+              }
             },
             builder: (context, Offset value, _) {
               return Positioned(
                 left: value.dx,
                 top: value.dy,
                 child: tileElement,
+              );
+            });
+      } else if (boardBloc.state.positionsToEliminate.contains(index)) {
+        return TweenAnimationBuilder(
+            tween: Tween<double>(begin: 1.0, end: 0.0),
+            duration: kThemeChangeDuration,
+            curve: Curves.bounceIn,
+            onEnd: () {
+              if (boardBloc.state.positionsToEliminate.first == index) {
+                boardBloc.add(const EndEvaluation());
+              }
+            },
+            builder: (context, double value, _) {
+              return Positioned(
+                left: position.dx,
+                top: position.dy,
+                child: Transform.scale(
+                  scale: value,
+                  child: tileElement,
+                ),
               );
             });
       } else {

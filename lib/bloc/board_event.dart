@@ -10,5 +10,6 @@ class BoardEvent with _$BoardEvent {
       {required int index, required BoardDirection direction}) = Move;
   const factory BoardEvent.endMove() = EndMove;
   const factory BoardEvent.evaluate() = Evaluate;
+  const factory BoardEvent.endEvaluation() = EndEvaluation;
   const factory BoardEvent.fill() = Fill;
 }

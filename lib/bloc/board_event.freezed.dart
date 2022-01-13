@@ -37,6 +37,10 @@ class _$BoardEventTearOff {
     return const Evaluate();
   }
 
+  EndEvaluation endEvaluation() {
+    return const EndEvaluation();
+  }
+
   Fill fill() {
     return const Fill();
   }
@@ -53,6 +57,7 @@ mixin _$BoardEvent {
     required TResult Function(int index, BoardDirection direction) move,
     required TResult Function() endMove,
     required TResult Function() evaluate,
+    required TResult Function() endEvaluation,
     required TResult Function() fill,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,6 +67,7 @@ mixin _$BoardEvent {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
   }) =>
       throw _privateConstructorUsedError;
@@ -71,6 +77,7 @@ mixin _$BoardEvent {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
     required TResult orElse(),
   }) =>
@@ -81,6 +88,7 @@ mixin _$BoardEvent {
     required TResult Function(Move value) move,
     required TResult Function(EndMove value) endMove,
     required TResult Function(Evaluate value) evaluate,
+    required TResult Function(EndEvaluation value) endEvaluation,
     required TResult Function(Fill value) fill,
   }) =>
       throw _privateConstructorUsedError;
@@ -90,6 +98,7 @@ mixin _$BoardEvent {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
   }) =>
       throw _privateConstructorUsedError;
@@ -99,6 +108,7 @@ mixin _$BoardEvent {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
     required TResult orElse(),
   }) =>
@@ -164,6 +174,7 @@ class _$Initialize implements Initialize {
     required TResult Function(int index, BoardDirection direction) move,
     required TResult Function() endMove,
     required TResult Function() evaluate,
+    required TResult Function() endEvaluation,
     required TResult Function() fill,
   }) {
     return initialize();
@@ -176,6 +187,7 @@ class _$Initialize implements Initialize {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
   }) {
     return initialize?.call();
@@ -188,6 +200,7 @@ class _$Initialize implements Initialize {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
     required TResult orElse(),
   }) {
@@ -204,6 +217,7 @@ class _$Initialize implements Initialize {
     required TResult Function(Move value) move,
     required TResult Function(EndMove value) endMove,
     required TResult Function(Evaluate value) evaluate,
+    required TResult Function(EndEvaluation value) endEvaluation,
     required TResult Function(Fill value) fill,
   }) {
     return initialize(this);
@@ -216,6 +230,7 @@ class _$Initialize implements Initialize {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
   }) {
     return initialize?.call(this);
@@ -228,6 +243,7 @@ class _$Initialize implements Initialize {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
     required TResult orElse(),
   }) {
@@ -318,6 +334,7 @@ class _$Move implements Move {
     required TResult Function(int index, BoardDirection direction) move,
     required TResult Function() endMove,
     required TResult Function() evaluate,
+    required TResult Function() endEvaluation,
     required TResult Function() fill,
   }) {
     return move(index, direction);
@@ -330,6 +347,7 @@ class _$Move implements Move {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
   }) {
     return move?.call(index, direction);
@@ -342,6 +360,7 @@ class _$Move implements Move {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
     required TResult orElse(),
   }) {
@@ -358,6 +377,7 @@ class _$Move implements Move {
     required TResult Function(Move value) move,
     required TResult Function(EndMove value) endMove,
     required TResult Function(Evaluate value) evaluate,
+    required TResult Function(EndEvaluation value) endEvaluation,
     required TResult Function(Fill value) fill,
   }) {
     return move(this);
@@ -370,6 +390,7 @@ class _$Move implements Move {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
   }) {
     return move?.call(this);
@@ -382,6 +403,7 @@ class _$Move implements Move {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
     required TResult orElse(),
   }) {
@@ -444,6 +466,7 @@ class _$EndMove implements EndMove {
     required TResult Function(int index, BoardDirection direction) move,
     required TResult Function() endMove,
     required TResult Function() evaluate,
+    required TResult Function() endEvaluation,
     required TResult Function() fill,
   }) {
     return endMove();
@@ -456,6 +479,7 @@ class _$EndMove implements EndMove {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
   }) {
     return endMove?.call();
@@ -468,6 +492,7 @@ class _$EndMove implements EndMove {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
     required TResult orElse(),
   }) {
@@ -484,6 +509,7 @@ class _$EndMove implements EndMove {
     required TResult Function(Move value) move,
     required TResult Function(EndMove value) endMove,
     required TResult Function(Evaluate value) evaluate,
+    required TResult Function(EndEvaluation value) endEvaluation,
     required TResult Function(Fill value) fill,
   }) {
     return endMove(this);
@@ -496,6 +522,7 @@ class _$EndMove implements EndMove {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
   }) {
     return endMove?.call(this);
@@ -508,6 +535,7 @@ class _$EndMove implements EndMove {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
     required TResult orElse(),
   }) {
@@ -564,6 +592,7 @@ class _$Evaluate implements Evaluate {
     required TResult Function(int index, BoardDirection direction) move,
     required TResult Function() endMove,
     required TResult Function() evaluate,
+    required TResult Function() endEvaluation,
     required TResult Function() fill,
   }) {
     return evaluate();
@@ -576,6 +605,7 @@ class _$Evaluate implements Evaluate {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
   }) {
     return evaluate?.call();
@@ -588,6 +618,7 @@ class _$Evaluate implements Evaluate {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
     required TResult orElse(),
   }) {
@@ -604,6 +635,7 @@ class _$Evaluate implements Evaluate {
     required TResult Function(Move value) move,
     required TResult Function(EndMove value) endMove,
     required TResult Function(Evaluate value) evaluate,
+    required TResult Function(EndEvaluation value) endEvaluation,
     required TResult Function(Fill value) fill,
   }) {
     return evaluate(this);
@@ -616,6 +648,7 @@ class _$Evaluate implements Evaluate {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
   }) {
     return evaluate?.call(this);
@@ -628,6 +661,7 @@ class _$Evaluate implements Evaluate {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
     required TResult orElse(),
   }) {
@@ -640,6 +674,134 @@ class _$Evaluate implements Evaluate {
 
 abstract class Evaluate implements BoardEvent {
   const factory Evaluate() = _$Evaluate;
+}
+
+/// @nodoc
+abstract class $EndEvaluationCopyWith<$Res> {
+  factory $EndEvaluationCopyWith(
+          EndEvaluation value, $Res Function(EndEvaluation) then) =
+      _$EndEvaluationCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$EndEvaluationCopyWithImpl<$Res> extends _$BoardEventCopyWithImpl<$Res>
+    implements $EndEvaluationCopyWith<$Res> {
+  _$EndEvaluationCopyWithImpl(
+      EndEvaluation _value, $Res Function(EndEvaluation) _then)
+      : super(_value, (v) => _then(v as EndEvaluation));
+
+  @override
+  EndEvaluation get _value => super._value as EndEvaluation;
+}
+
+/// @nodoc
+
+class _$EndEvaluation implements EndEvaluation {
+  const _$EndEvaluation();
+
+  @override
+  String toString() {
+    return 'BoardEvent.endEvaluation()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is EndEvaluation);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initialize,
+    required TResult Function(int index, BoardDirection direction) move,
+    required TResult Function() endMove,
+    required TResult Function() evaluate,
+    required TResult Function() endEvaluation,
+    required TResult Function() fill,
+  }) {
+    return endEvaluation();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initialize,
+    TResult Function(int index, BoardDirection direction)? move,
+    TResult Function()? endMove,
+    TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
+    TResult Function()? fill,
+  }) {
+    return endEvaluation?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initialize,
+    TResult Function(int index, BoardDirection direction)? move,
+    TResult Function()? endMove,
+    TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
+    TResult Function()? fill,
+    required TResult orElse(),
+  }) {
+    if (endEvaluation != null) {
+      return endEvaluation();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Initialize value) initialize,
+    required TResult Function(Move value) move,
+    required TResult Function(EndMove value) endMove,
+    required TResult Function(Evaluate value) evaluate,
+    required TResult Function(EndEvaluation value) endEvaluation,
+    required TResult Function(Fill value) fill,
+  }) {
+    return endEvaluation(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(Initialize value)? initialize,
+    TResult Function(Move value)? move,
+    TResult Function(EndMove value)? endMove,
+    TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
+    TResult Function(Fill value)? fill,
+  }) {
+    return endEvaluation?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Initialize value)? initialize,
+    TResult Function(Move value)? move,
+    TResult Function(EndMove value)? endMove,
+    TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
+    TResult Function(Fill value)? fill,
+    required TResult orElse(),
+  }) {
+    if (endEvaluation != null) {
+      return endEvaluation(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class EndEvaluation implements BoardEvent {
+  const factory EndEvaluation() = _$EndEvaluation;
 }
 
 /// @nodoc
@@ -684,6 +846,7 @@ class _$Fill implements Fill {
     required TResult Function(int index, BoardDirection direction) move,
     required TResult Function() endMove,
     required TResult Function() evaluate,
+    required TResult Function() endEvaluation,
     required TResult Function() fill,
   }) {
     return fill();
@@ -696,6 +859,7 @@ class _$Fill implements Fill {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
   }) {
     return fill?.call();
@@ -708,6 +872,7 @@ class _$Fill implements Fill {
     TResult Function(int index, BoardDirection direction)? move,
     TResult Function()? endMove,
     TResult Function()? evaluate,
+    TResult Function()? endEvaluation,
     TResult Function()? fill,
     required TResult orElse(),
   }) {
@@ -724,6 +889,7 @@ class _$Fill implements Fill {
     required TResult Function(Move value) move,
     required TResult Function(EndMove value) endMove,
     required TResult Function(Evaluate value) evaluate,
+    required TResult Function(EndEvaluation value) endEvaluation,
     required TResult Function(Fill value) fill,
   }) {
     return fill(this);
@@ -736,6 +902,7 @@ class _$Fill implements Fill {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
   }) {
     return fill?.call(this);
@@ -748,6 +915,7 @@ class _$Fill implements Fill {
     TResult Function(Move value)? move,
     TResult Function(EndMove value)? endMove,
     TResult Function(Evaluate value)? evaluate,
+    TResult Function(EndEvaluation value)? endEvaluation,
     TResult Function(Fill value)? fill,
     required TResult orElse(),
   }) {

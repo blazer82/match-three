@@ -15,23 +15,33 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
           status: BoardStatus.unknown,
           board: List.filled(cols * rows, 0),
           currentMove: [],
+          positionsToEliminate: [],
         )) {
     on<Initialize>(_onInitialize);
     on<Move>(_onMove);
     on<EndMove>(_onEndMove);
     on<Evaluate>(_onEvaluate);
+    on<EndEvaluation>(_onEndEvaluation);
     on<Fill>(_onFill);
   }
 
   final int cols;
   final int rows;
 
+  final randGen = Random();
+
   void _onInitialize(Initialize event, Emitter<BoardState> emit) {
-    final randGen = Random();
+    var board = _newBoard();
+    var matches = _returnMatches(board);
+
+    while (matches.isNotEmpty) {
+      board = _newBoard();
+      matches = _returnMatches(board);
+    }
 
     emit(state.copyWith(
       status: BoardStatus.idle,
-      board: state.board.map((_) => randGen.nextInt(5)).toList(growable: false),
+      board: board,
     ));
   }
 
@@ -42,16 +52,16 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
     // Check for impossible moves
     switch (event.direction) {
       case BoardDirection.down:
-        index2 = (index1 + cols) < state.board.length ? index1 + cols : null;
+        index2 = _getBelowOrNull(index1);
         break;
       case BoardDirection.left:
-        index2 = index1 % cols > 0 ? index1 - 1 : null;
+        index2 = _getLeftOrNull(index1);
         break;
       case BoardDirection.right:
-        index2 = (index1 + 1) % cols > 0 ? index1 + 1 : null;
+        index2 = _getRightOrNull(index1);
         break;
       case BoardDirection.up:
-        index2 = (index1 - cols) >= 0 ? index1 - cols : null;
+        index2 = _getAboveOrNull(index1);
         break;
     }
 
@@ -75,11 +85,27 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
       status: BoardStatus.idle,
       currentMove: [],
     ));
+
+    add(const Evaluate());
   }
 
   void _onEvaluate(Evaluate event, Emitter<BoardState> emit) {
+    final matches = _returnMatches(state.board);
+
     emit(state.copyWith(
       status: BoardStatus.evaluating,
+      positionsToEliminate: matches,
+    ));
+  }
+
+  void _onEndEvaluation(EndEvaluation event, Emitter<BoardState> emit) {
+    emit(state.copyWith(
+      status: BoardStatus.idle,
+      board: state.board
+          .mapIndexed((index, element) =>
+              state.positionsToEliminate.contains(index) ? 0 : element)
+          .toList(growable: false),
+      positionsToEliminate: [],
     ));
   }
 
@@ -88,4 +114,41 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
       status: BoardStatus.filling,
     ));
   }
+
+  int? _getLeftOrNull(int index) => (index % cols) > 0 ? index - 1 : null;
+  int? _getRightOrNull(int index) => (index + 1) % cols > 0 ? index + 1 : null;
+  int? _getAboveOrNull(int index) => (index - cols) >= 0 ? index - cols : null;
+  int? _getBelowOrNull(int index) =>
+      (index + cols) < state.board.length ? index + cols : null;
+
+  List<int> _newBoard() =>
+      state.board.map((_) => randGen.nextInt(7) + 1).toList(growable: false);
+
+  List<int> _returnMatches(List<int> board) => board
+      .mapIndexed((index, element) {
+        final left = _getLeftOrNull(index);
+        final right = _getRightOrNull(index);
+        final above = _getAboveOrNull(index);
+        final below = _getBelowOrNull(index);
+
+        if (left != null &&
+            right != null &&
+            element == state.board[left] &&
+            element == state.board[right]) {
+          return [left, index, right];
+        }
+
+        if (above != null &&
+            below != null &&
+            element == state.board[above] &&
+            element == state.board[below]) {
+          return [above, index, below];
+        }
+
+        return null;
+      })
+      .whereNotNull()
+      .expand((element) => element)
+      .toSet()
+      .toList(growable: false);
 }
