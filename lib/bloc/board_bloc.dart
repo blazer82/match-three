@@ -99,8 +99,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
         status: BoardStatus.evaluating,
         positionsToEliminate: matches,
       ));
-    }
-    else {
+    } else {
       emit(state.copyWith(
         status: BoardStatus.idle,
       ));
@@ -144,11 +143,17 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
       }
     }
 
-    emit(state.copyWith(
-      status: BoardStatus.filling,
-      fillAnimations: animations,
-      pendingBoard: board,
-    ));
+    if (animations.isNotEmpty) {
+      emit(state.copyWith(
+        status: BoardStatus.filling,
+        fillAnimations: animations,
+        pendingBoard: board,
+      ));
+    } else {
+      emit(state.copyWith(
+        status: BoardStatus.idle,
+      ));
+    }
   }
 
   void _onEndFill(EndFill event, Emitter<BoardState> emit) {

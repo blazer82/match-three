@@ -90,7 +90,8 @@ class _BoardState extends State<_Board> {
         ),
       );
 
-      if (boardBloc.state.currentMove.contains(index)) {
+      if (boardBloc.state.status == BoardStatus.moving &&
+          boardBloc.state.currentMove.contains(index)) {
         final otherIndex = boardBloc.state.currentMove
             .firstWhere((element) => element != index);
 
@@ -112,7 +113,8 @@ class _BoardState extends State<_Board> {
                 child: tileElement,
               );
             });
-      } else if (boardBloc.state.positionsToEliminate.contains(index)) {
+      } else if (boardBloc.state.status == BoardStatus.evaluating &&
+          boardBloc.state.positionsToEliminate.contains(index)) {
         return TweenAnimationBuilder(
             tween: Tween<double>(begin: 1.0, end: 0.0),
             duration: kThemeChangeDuration,
@@ -132,8 +134,9 @@ class _BoardState extends State<_Board> {
                 ),
               );
             });
-      } else if (boardBloc.state.fillAnimations
-          .any((element) => element.first == index)) {
+      } else if (boardBloc.state.status == BoardStatus.filling &&
+          boardBloc.state.fillAnimations
+              .any((element) => element.first == index)) {
         final otherIndex = boardBloc.state.fillAnimations
             .firstWhere((element) => element.first == index)
             .last;
@@ -218,7 +221,8 @@ class _BoardState extends State<_Board> {
       }
 
       return GestureDetector(
-        onPanStart: _handleDragStart,
+        onPanStart:
+            boardState.status == BoardStatus.idle ? _handleDragStart : null,
         onPanUpdate: _handleDragUpdate,
         onPanEnd: _handleDragEnd,
         child: Stack(
