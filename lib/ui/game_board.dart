@@ -88,7 +88,7 @@ class GameBoardState extends State<GameBoard> {
         final otherPosition = _getLocalPositionFromTileIndex(otherIndex);
 
         return TweenAnimationBuilder(
-            tween: Tween<Offset>(begin: otherPosition, end: position),
+            tween: Tween<Offset>(begin: boardBloc.state.moveIsRollbackEligible ? otherPosition : position, end: boardBloc.state.moveIsRollbackEligible ? position:otherPosition),
             duration: kThemeChangeDuration,
             curve: Curves.bounceInOut,
             onEnd: () {

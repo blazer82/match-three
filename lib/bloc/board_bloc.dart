@@ -19,6 +19,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
           positionsToEliminate: [],
           fillAnimations: [],
           score: 0,
+          moveIsRollbackEligible: false,
         )) {
     on<Initialize>(_onInitialize);
     on<Move>(_onMove);
@@ -82,6 +83,8 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
               index == index1 ? tile2 : (index == index2 ? tile1 : tile))
           .toList(growable: false),
       currentMove: [index1, index2],
+      possiblyInvalidMove: event,
+      moveIsRollbackEligible: !state.moveIsRollbackEligible,
     ));
   }
 
@@ -97,15 +100,21 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
   void _onEvaluate(Evaluate event, Emitter<BoardState> emit) {
     final matches = _returnMatches(state.board);
 
+    final possiblyInvalidMove = state.possiblyInvalidMove;
+
     if (matches.isNotEmpty) {
       emit(state.copyWith(
         status: BoardStatus.evaluating,
         positionsToEliminate: matches,
         score: state.score + matches.length,
+        moveIsRollbackEligible: false,
       ));
+    } else if (possiblyInvalidMove != null && state.moveIsRollbackEligible) {
+      add(possiblyInvalidMove.copyWith());
     } else {
       emit(state.copyWith(
         status: BoardStatus.idle,
+        moveIsRollbackEligible: false,
       ));
     }
   }

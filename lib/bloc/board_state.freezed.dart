@@ -26,7 +26,9 @@ class _$BoardStateTearOff {
       required List<int> currentMove,
       required List<int> positionsToEliminate,
       required List<List<int>> fillAnimations,
-      required int score}) {
+      required int score,
+      Move? possiblyInvalidMove,
+      required bool moveIsRollbackEligible}) {
     return _BoardState(
       status: status,
       board: board,
@@ -36,6 +38,8 @@ class _$BoardStateTearOff {
       positionsToEliminate: positionsToEliminate,
       fillAnimations: fillAnimations,
       score: score,
+      possiblyInvalidMove: possiblyInvalidMove,
+      moveIsRollbackEligible: moveIsRollbackEligible,
     );
   }
 }
@@ -53,6 +57,8 @@ mixin _$BoardState {
   List<int> get positionsToEliminate => throw _privateConstructorUsedError;
   List<List<int>> get fillAnimations => throw _privateConstructorUsedError;
   int get score => throw _privateConstructorUsedError;
+  Move? get possiblyInvalidMove => throw _privateConstructorUsedError;
+  bool get moveIsRollbackEligible => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BoardStateCopyWith<BoardState> get copyWith =>
@@ -72,7 +78,9 @@ abstract class $BoardStateCopyWith<$Res> {
       List<int> currentMove,
       List<int> positionsToEliminate,
       List<List<int>> fillAnimations,
-      int score});
+      int score,
+      Move? possiblyInvalidMove,
+      bool moveIsRollbackEligible});
 }
 
 /// @nodoc
@@ -93,6 +101,8 @@ class _$BoardStateCopyWithImpl<$Res> implements $BoardStateCopyWith<$Res> {
     Object? positionsToEliminate = freezed,
     Object? fillAnimations = freezed,
     Object? score = freezed,
+    Object? possiblyInvalidMove = freezed,
+    Object? moveIsRollbackEligible = freezed,
   }) {
     return _then(_value.copyWith(
       status: status == freezed
@@ -127,6 +137,14 @@ class _$BoardStateCopyWithImpl<$Res> implements $BoardStateCopyWith<$Res> {
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as int,
+      possiblyInvalidMove: possiblyInvalidMove == freezed
+          ? _value.possiblyInvalidMove
+          : possiblyInvalidMove // ignore: cast_nullable_to_non_nullable
+              as Move?,
+      moveIsRollbackEligible: moveIsRollbackEligible == freezed
+          ? _value.moveIsRollbackEligible
+          : moveIsRollbackEligible // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -145,7 +163,9 @@ abstract class _$BoardStateCopyWith<$Res> implements $BoardStateCopyWith<$Res> {
       List<int> currentMove,
       List<int> positionsToEliminate,
       List<List<int>> fillAnimations,
-      int score});
+      int score,
+      Move? possiblyInvalidMove,
+      bool moveIsRollbackEligible});
 }
 
 /// @nodoc
@@ -168,6 +188,8 @@ class __$BoardStateCopyWithImpl<$Res> extends _$BoardStateCopyWithImpl<$Res>
     Object? positionsToEliminate = freezed,
     Object? fillAnimations = freezed,
     Object? score = freezed,
+    Object? possiblyInvalidMove = freezed,
+    Object? moveIsRollbackEligible = freezed,
   }) {
     return _then(_BoardState(
       status: status == freezed
@@ -202,6 +224,14 @@ class __$BoardStateCopyWithImpl<$Res> extends _$BoardStateCopyWithImpl<$Res>
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as int,
+      possiblyInvalidMove: possiblyInvalidMove == freezed
+          ? _value.possiblyInvalidMove
+          : possiblyInvalidMove // ignore: cast_nullable_to_non_nullable
+              as Move?,
+      moveIsRollbackEligible: moveIsRollbackEligible == freezed
+          ? _value.moveIsRollbackEligible
+          : moveIsRollbackEligible // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -217,7 +247,9 @@ class _$_BoardState implements _BoardState {
       required this.currentMove,
       required this.positionsToEliminate,
       required this.fillAnimations,
-      required this.score});
+      required this.score,
+      this.possiblyInvalidMove,
+      required this.moveIsRollbackEligible});
 
   @override
   final BoardStatus status;
@@ -235,10 +267,14 @@ class _$_BoardState implements _BoardState {
   final List<List<int>> fillAnimations;
   @override
   final int score;
+  @override
+  final Move? possiblyInvalidMove;
+  @override
+  final bool moveIsRollbackEligible;
 
   @override
   String toString() {
-    return 'BoardState(status: $status, board: $board, spareBoard: $spareBoard, pendingBoard: $pendingBoard, currentMove: $currentMove, positionsToEliminate: $positionsToEliminate, fillAnimations: $fillAnimations, score: $score)';
+    return 'BoardState(status: $status, board: $board, spareBoard: $spareBoard, pendingBoard: $pendingBoard, currentMove: $currentMove, positionsToEliminate: $positionsToEliminate, fillAnimations: $fillAnimations, score: $score, possiblyInvalidMove: $possiblyInvalidMove, moveIsRollbackEligible: $moveIsRollbackEligible)';
   }
 
   @override
@@ -258,7 +294,11 @@ class _$_BoardState implements _BoardState {
                 .equals(other.positionsToEliminate, positionsToEliminate) &&
             const DeepCollectionEquality()
                 .equals(other.fillAnimations, fillAnimations) &&
-            const DeepCollectionEquality().equals(other.score, score));
+            const DeepCollectionEquality().equals(other.score, score) &&
+            const DeepCollectionEquality()
+                .equals(other.possiblyInvalidMove, possiblyInvalidMove) &&
+            const DeepCollectionEquality()
+                .equals(other.moveIsRollbackEligible, moveIsRollbackEligible));
   }
 
   @override
@@ -271,7 +311,9 @@ class _$_BoardState implements _BoardState {
       const DeepCollectionEquality().hash(currentMove),
       const DeepCollectionEquality().hash(positionsToEliminate),
       const DeepCollectionEquality().hash(fillAnimations),
-      const DeepCollectionEquality().hash(score));
+      const DeepCollectionEquality().hash(score),
+      const DeepCollectionEquality().hash(possiblyInvalidMove),
+      const DeepCollectionEquality().hash(moveIsRollbackEligible));
 
   @JsonKey(ignore: true)
   @override
@@ -288,7 +330,9 @@ abstract class _BoardState implements BoardState {
       required List<int> currentMove,
       required List<int> positionsToEliminate,
       required List<List<int>> fillAnimations,
-      required int score}) = _$_BoardState;
+      required int score,
+      Move? possiblyInvalidMove,
+      required bool moveIsRollbackEligible}) = _$_BoardState;
 
   @override
   BoardStatus get status;
@@ -306,6 +350,10 @@ abstract class _BoardState implements BoardState {
   List<List<int>> get fillAnimations;
   @override
   int get score;
+  @override
+  Move? get possiblyInvalidMove;
+  @override
+  bool get moveIsRollbackEligible;
   @override
   @JsonKey(ignore: true)
   _$BoardStateCopyWith<_BoardState> get copyWith =>
