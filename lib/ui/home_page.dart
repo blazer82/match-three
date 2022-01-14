@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<BoardBloc>(
-      create: (_) => BoardBloc(cols: 6, rows: 6),
+      create: (_) => BoardBloc(cols: 7, rows: 7),
       child: SafeArea(
         child: Column(
           children: [

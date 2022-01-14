@@ -186,7 +186,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
       (index + cols) < (board ?? state.board).length ? index + cols : null;
 
   List<int> _newBoard() =>
-      state.board.map((_) => randGen.nextInt(7) + 1).toList(growable: false);
+      state.board.map((_) => randGen.nextInt(5) + 1).toList(growable: false);
 
   List<int> _returnMatches(List<int> board) => board
       .mapIndexed((index, element) {

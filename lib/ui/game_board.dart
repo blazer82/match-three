@@ -32,10 +32,6 @@ class GameBoardState extends State<GameBoard> {
           return Colors.yellow;
         case 5:
           return Colors.purple;
-        case 6:
-          return Colors.orange;
-        case 7:
-          return Colors.teal;
         default:
           return Colors.transparent;
       }
