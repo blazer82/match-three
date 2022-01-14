@@ -134,7 +134,7 @@ class GameBoardState extends State<GameBoard> {
 
         return TweenAnimationBuilder(
             tween: Tween<Offset>(begin: position, end: otherPosition),
-            duration: kThemeChangeDuration * 5,
+            duration: kThemeChangeDuration * 2,
             curve: Curves.bounceOut,
             onEnd: () {
               if (boardBloc.state.fillAnimations.first.first == index) {
@@ -176,7 +176,7 @@ class GameBoardState extends State<GameBoard> {
 
         return TweenAnimationBuilder(
             tween: Tween<Offset>(begin: position, end: otherPosition),
-            duration: kThemeChangeDuration * 5,
+            duration: kThemeChangeDuration * 2,
             curve: Curves.bounceOut,
             onEnd: () {
               if (boardBloc.state.spareBoard.length +
