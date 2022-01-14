@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:match_three/bloc/board_bloc.dart';
 import 'package:match_three/bloc/board_event.dart';
@@ -104,6 +105,9 @@ class GameBoardState extends State<GameBoard> {
             });
       } else if (boardBloc.state.status == BoardStatus.evaluating &&
           boardBloc.state.positionsToEliminate.contains(index)) {
+        if (boardBloc.state.positionsToEliminate.first == index) {
+          HapticFeedback.lightImpact();
+        }
         return TweenAnimationBuilder(
             tween: Tween<double>(begin: 1.0, end: 0.0),
             duration: kThemeChangeDuration,
